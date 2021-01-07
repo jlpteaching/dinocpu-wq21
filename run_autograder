@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+to_submit=("src/main/scala/components/alucontrol.scala"
+           "src/main/scala/single-cycle/cpu.scala")
+
+# Copy the files from /autograder/submission to the proper location
+
+for i in ${to_submit[@]}
+do
+    name=$(basename $i)
+    cp -r /autograder/submission/$name /dinocpu/$i
+done
+
+# change directory to the main codcpu directory
+cd /dinocpu
+
+# Run the test. This should generate the json file in /autograder/results
+sbt "Grader / testOnly dinocpu.test.grader.Lab1Grader"
+
+# Remove all of the colors from the json
+cd /autograder/results
+cat results.json | perl -pe 's/\e\[?.*?[\@-~]//g' > tmp.json
+mv tmp.json results.json
