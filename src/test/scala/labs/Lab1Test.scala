@@ -16,28 +16,16 @@ class ALUControlUnitRTypeTester(c: ALUControl) extends PeekPokeTester(c) {
   // Copied from Patterson and Waterman Figure 2.3
   val tests = List(
     // alu,   itype,    Funct7,       Func3,    Control Input
-    (  false.B, false.B, "b0000000".U, "b000".U, "b0010".U, "load/store"),
-    (  false.B, false.B, "b1111111".U, "b111".U, "b0010".U, "load/store"),
-    (  false.B, false.B, "b0000000".U, "b000".U, "b0010".U, "load/store"),
-    (  true.B, false.B, "b0000000".U, "b000".U, "b0010".U, "add"),
-    (  true.B, false.B, "b0100000".U, "b000".U, "b0011".U, "sub"),
-    (  true.B, false.B, "b0000000".U, "b001".U, "b1001".U, "sll"),
-    (  true.B, false.B, "b0000000".U, "b010".U, "b1000".U, "slt"),
-    (  true.B, false.B, "b0000000".U, "b011".U, "b0101".U, "sltu"),
-    (  true.B, false.B, "b0000000".U, "b100".U, "b0110".U, "xor"),
-    (  true.B, false.B, "b0000000".U, "b101".U, "b0111".U, "srl"),
-    (  true.B, false.B, "b0100000".U, "b101".U, "b0100".U, "sra"),
-    (  true.B, false.B, "b0000000".U, "b110".U, "b0001".U, "or"),
-    (  true.B, false.B, "b0000000".U, "b111".U, "b0000".U, "and"),
-    (  true.B, true.B,  "b0000000".U, "b000".U, "b0010".U, "addi"),
-    (  true.B, true.B,  "b0000000".U, "b010".U, "b1000".U, "slti"),
-    (  true.B, true.B,  "b0000000".U, "b011".U, "b0101".U, "sltiu"),
-    (  true.B, true.B,  "b0000000".U, "b100".U, "b0110".U, "xori"),
-    (  true.B, true.B,  "b0000000".U, "b110".U, "b0001".U, "ori"),
-    (  true.B, true.B,  "b0000000".U, "b111".U, "b0000".U, "andi"),
-    (  true.B, true.B,  "b0000000".U, "b001".U, "b1001".U, "slli"),
-    (  true.B, true.B,  "b0000000".U, "b101".U, "b0111".U, "srli"),
-    (  true.B, true.B,  "b0100000".U, "b101".U, "b0100".U, "srai")
+    (  true.B, false.B, "b0000000".U, "b000".U, "b0111".U, "add"),
+    (  true.B, false.B, "b0100000".U, "b000".U, "b0100".U, "sub"),
+    (  true.B, false.B, "b0000000".U, "b001".U, "b1000".U, "sll"),
+    (  true.B, false.B, "b0000000".U, "b010".U, "b1001".U, "slt"),
+    (  true.B, false.B, "b0000000".U, "b011".U, "b0001".U, "sltu"),
+    (  true.B, false.B, "b0000000".U, "b100".U, "b0000".U, "xor"),
+    (  true.B, false.B, "b0000000".U, "b101".U, "b0010".U, "srl"),
+    (  true.B, false.B, "b0100000".U, "b101".U, "b0011".U, "sra"),
+    (  true.B, false.B, "b0000000".U, "b110".U, "b0101".U, "or"),
+    (  true.B, false.B, "b0000000".U, "b111".U, "b0110".U, "and")
   )
   for (t <- tests) {
     poke(ctl.io.aluop, t._1)

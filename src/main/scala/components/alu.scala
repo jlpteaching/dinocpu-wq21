@@ -22,34 +22,34 @@ class ALU extends Module {
     val result    = Output(UInt(32.W))
   })
 
-  when (io.operation === "b0000".U) { // and
+  when (io.operation === "b0110".U) { // and
     io.result := io.inputx & io.inputy
   }
-  .elsewhen (io.operation === "b0001".U) { // or
+  .elsewhen (io.operation === "b0101".U) { // or
     io.result := io.inputx | io.inputy
   }
-  .elsewhen (io.operation === "b0010".U) { // add
+  .elsewhen (io.operation === "b0111".U) { // add
     io.result := io.inputx + io.inputy
   }
-  .elsewhen (io.operation === "b0011".U) { // sub
+  .elsewhen (io.operation === "b0100".U) { // sub
     io.result := io.inputx - io.inputy
   }
-  .elsewhen (io.operation === "b0100".U) { // sra
+  .elsewhen (io.operation === "b0011".U) { // sra
     io.result := (io.inputx.asSInt >> io.inputy(4,0)).asUInt // arithmetic (signed)
   }
-  .elsewhen (io.operation === "b0101".U) { // stlu
+  .elsewhen (io.operation === "b0001".U) { // sltu
     io.result := (io.inputx < io.inputy)
   }
-  .elsewhen (io.operation === "b0110".U) { // xor
+  .elsewhen (io.operation === "b0000".U) { // xor
     io.result := io.inputx ^ io.inputy
   }
-  .elsewhen (io.operation === "b0111".U) { // srl
+  .elsewhen (io.operation === "b0010".U) { // srl
     io.result := io.inputx >> io.inputy(4,0)
   }
-  .elsewhen (io.operation === "b1000".U) { // slt
+  .elsewhen (io.operation === "b1001".U) { // slt
     io.result := (io.inputx.asSInt < io.inputy.asSInt).asUInt // signed
   }
-  .elsewhen (io.operation === "b1001".U) { // sll
+  .elsewhen (io.operation === "b1000".U) { // sll
     io.result := io.inputx << io.inputy(4,0)
   }
   .elsewhen (io.operation === "b1010".U) { // nor
