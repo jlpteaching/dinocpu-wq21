@@ -483,7 +483,7 @@ Single stepper> dump alu
 alu.io.inputx                  0 (0x0)
 alu.io.result                  1234 (0x4d2)
 alu.io.inputy                  1234 (0x4d2)
-alu.io.operation               2 (0x2)
+alu.io.operation               7 (0x2)
 ```
 
 Finally, you can also dump the value of specific registers.
