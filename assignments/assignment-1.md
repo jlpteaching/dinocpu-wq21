@@ -1,6 +1,6 @@
 ---
 Authors: Jason Lowe-Power, Filipe Eduardo Borges
-Editor: Justin Perona, Julian Angeles, Maryam Babaie
+Editor:  Maryam Babaie
 Title: DINO CPU Assignment 1
 ---
 
