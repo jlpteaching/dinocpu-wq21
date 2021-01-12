@@ -637,6 +637,16 @@ Note: There is no partial credit on Gradescope.
 Each part is all or nothing.
 Either the test passes or it fails.
 
+### Diagram
+
+Upload your diagram to this [Gradescope assignment](https://www.gradescope.com/courses/216663/assignments/932332).
+
+We will be grading this diagram and looking for the following things:
+
+* The correct wires.
+* Every wire should contain its width in bits.
+* For wires that are a subset of all of the bits, label which bits are on the wire.
+
 ## Academic misconduct reminder
 
 You are to work on this project **individually**.
