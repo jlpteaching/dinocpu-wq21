@@ -176,11 +176,11 @@ You will fill in where it says *Your code goes here*.
 /**
  * The ALU control unit
  *
- * Input:  add, if true, add no matter what the other bits are
- * Input:  immediate, if true, ignore funct7 when computing the operation
- * Input:  funct7, the most significant bits of the instruction
- * Input:  funct3, the middle three bits of the instruction (12-14)
- * Output: operation, What we want the ALU to do.
+ * Input: aluop    	add, if true, add no matter what the other bits are
+ * Input: itype    	immediate, if true, ignore funct7 when computing the operation
+ * Input: funct7   	the most significant bits of the instruction
+ * Input: funct3  	the middle three bits of the instruction (12-14)
+ * Output: operation	What we want the ALU to do.
  *
  * For more information, see Section 4.4 and A.5 of Patterson and Hennessy
  * This follows figure 4.12
