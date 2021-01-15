@@ -429,7 +429,7 @@ file loaded in 0.177122564 seconds, 548 symbols, 531 statements
 The test only runs for a single cycle, since you're just executing one instruction.
 
 Note that the test initializes `t0` to 1234.
-You can see this on line 70 in [`src/test/scala/labs/Lab1Test.scala`](https://github.com/jlpteaching/dinocpu/blob/main/src/test/scala/labs/Lab1Test.scala).
+You can see this on line 70 in [`src/test/scala/labs/Lab1Test.scala`](https://github.com/jlpteaching/dinocpu-wq21/blob/main/src/test/scala/labs/Lab1Test.scala).
 This creates a `CPUTestCase` that:
 
 * runs the `add1` program

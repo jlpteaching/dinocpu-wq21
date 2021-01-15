@@ -12,24 +12,24 @@ We started using it in the Winter 2019 offering of 154B and we forsee making sig
 
 ## Working with the DINO CPU code
 
-You can find all of the details on how to work with the DINO CPU in the [README file](https://github.com/jlpteaching/dinocpu/blob/master/README.md) and the [documentation](https://github.com/jlpteaching/dinocpu/tree/master/documentation) in the [DINO CPU repository](https://github.com/jlpteaching/dinocpu/).
+You can find all of the details on how to work with the DINO CPU in the [README file]({{"/README" | relative_url}}) and the [documentation]({{"/documentation" | relative_url}}) in the [DINO CPU repository](https://github.com/jlpteaching/dinocpu-wq21/).
 
 You must first download the template code before you can start working on the DINO CPU.
 The template code is on GitHub, so you can simply clone the repository:
 
 ```
-git clone https://github.com/jlpteaching/dinocpu.git
+git clone https://github.com/jlpteaching/dinocpu-wq21.git
 ```
 
-Then, if you change into the newly created `dinocpu` directory, you can run the Singularity container with Chisel and start working on the assignment!
+Then, if you change into the newly created `dinocpu-wq21` directory, you can run the Singularity container with Chisel and start working on the assignment!
 
 ```
-cd dinocpu
+cd dinocpu-wq21
 singularity run library://jlowepower/default/dinocpu
 [Lots of output your first time.
 This may also take 5-10 minutes to download all of the libraries, etc.]
 ...
-sbt:dinocpu>
+sbt:dinocpu-sq21>
 ```
 
 More info on setting up the Sigularity container system can be found in the [Singularity documentation](singularity.md).

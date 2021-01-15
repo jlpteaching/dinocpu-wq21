@@ -22,10 +22,10 @@ The repository was originally cloned from https://github.com/ucb-bar/chisel-temp
 
 # Getting the code
 
-To get the code, you can clone the repository that is in jlpteaching: `jlpteaching/dinocpu`.
+To get the code, you can clone the repository that is in jlpteaching: `jlpteaching/dinocpu-wq21`.
 
 ```
-git clone https://github.com/jlpteaching/dinocpu.git
+git clone https://github.com/jlpteaching/dinocpu-wq21.git
 ```
 
 ## Overview of code

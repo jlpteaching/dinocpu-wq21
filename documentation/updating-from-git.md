@@ -15,24 +15,24 @@ If you don't want to use your code from lab 1, but want to use my code to get st
 git checkout -b my-lab1-solution
 git add .
 git commit -m "Add my solution to lab 1"
-git checkout master
+git checkout main
 git pull
 ```
 
 The commands above create a new branch (my-lab1-solution) and then commit all of your current outstanding changes to that branch.
-Then, it checks out the master branch and pulls the updates from the dinocpu repository (on jlpteaching).
+Then, it checks out the main branch and pulls the updates from the dinocpu repository (on jlpteaching).
 
-If you have already committed things to master you can use the following:
+If you have already committed things to main you can use the following:
 
 ```
 git checkout -b my-lab1-solution
-git checkout master
-git reset --hard origin/master
+git checkout main
+git reset --hard origin/main
 git pull
 ```
 
-This creates a new branch (my-lab1-solution) then resets your master branch to be the same as the origin's master branch.
-Finally, it pulls any updates from the origin (jlpteaching/dinocpu, presumably).
+This creates a new branch (my-lab1-solution) then resets your main branch to be the same as the origin's main branch.
+Finally, it pulls any updates from the origin (jlpteaching/dinocpu-wq21, presumably).
 
 If you want to use your own solution to lab 1 it's a little more complicated:
 
@@ -40,13 +40,13 @@ If you want to use your own solution to lab 1 it's a little more complicated:
 git add .
 git commit -m "Add my lab1 solution"
 git fetch
-git merge origin/master
+git merge origin/main
 ```
 
-This will merge the updates in origin (jlpteaching/dinocpu) into your master branch.
+This will merge the updates in origin (jlpteaching/dinocpu-wq21) into your main branch.
 **There will be merge conflicts** since both you and I modified cpu.scala and alucontrol.scala.
 You will have to decide how to deal with those conflicts.
 See https://help.github.com/articles/resolving-a-merge-conflict-using-the-command-line/ for more information.
-You could also do the same as the first two options to create a my-lab1-solution branch and set master to track origin/master directly then merge master with my-lab1-solution.
+You could also do the same as the first two options to create a my-lab1-solution branch and set main to track origin/main directly then merge main with my-lab1-solution.
 
 There are many other ways to deal with this in git. These are the simplest that I could come up with off the top of my head. I'm happy to help out more in office hours if you get stuck. However, debugging git over piazza is going to be tough :). We'll do our best, though!
