@@ -345,7 +345,7 @@ This did not require a control unit since there were no need for extra MUXes.
 However, in this assignment, you will be implementing the rest of the RISC-V instructions, so you will need to use the control unit.
 
 The first step is to hook up the control unit and get the R-type instructions working again.
-You shouldn't have to change all that much code in `cpu.scala` from the first assignment after you applying changes regarding [NextPC unit](#part0-nextpc-unit-overview).
+You shouldn't have to change all that much code in `cpu.scala` from the first assignment after you applying changes regarding [NextPC unit](#part-0-nextpc-unit-overview).
 All you have to do is to hook up the `opcode` to the input of the control unit and its output `aluop` and `itype` to the alu control unit.
 We have already implemented the R-type control logic for you.
 You can also use the appropriate signals generated from the control unit (e.g., `regwrite`) to drive your data path.
