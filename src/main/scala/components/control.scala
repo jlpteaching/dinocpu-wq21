@@ -10,17 +10,17 @@ import chisel3.util.{BitPat, ListLookup}
  *
  * Input: opcode:     Opcode from instruction
  *
- * Output: itype         True if we're working on an itype instruction
- * Output: aluop         0 for ld/st, 1 for R-type and jalr
- * Output: ysrc          source for the second ALU/nextpc input (0 is readdata2 and 1 is immediate)
+ * Output: itype         true if we're working on an itype instruction
+ * Output: aluop         true for R-type and I-type, false otherwise
  * Output: xsrc          source for the first ALU/nextpc input (0 is readdata1, 1 is pc)
+ * Output: ysrc          source for the second ALU/nextpc input (0 is readdata2 and 1 is immediate)
  * Output: branch        true if branch
  * Output: jal           true if a jal
  * Output: jalr          true if a jalr instruction
  * Output: plus4         true if ALU should add 4 to inputx
- * Output: resultselect  0 for result from alu, 1 for immediate
+ * Output: resultselect  false for result from alu, true for immediate
  * Output: memop         00 if not using memory, 10 if reading, and 11 if writing
- * Output: toreg         0 for result from execute, 1 for data from memory
+ * Output: toreg         false for result from execute, true for data from memory
  * Output: regwrite      true if writing to the register file
  * Output: validinst     True if the instruction we're decoding is valid
  *

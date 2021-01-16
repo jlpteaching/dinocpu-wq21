@@ -1,13 +1,16 @@
 ---
 Authors: Jason Lowe-Power, Filipe Eduardo Borges
-Editor: Justin Perona, Julian Angeles, Maryam Babaie
+Editor:  Maryam Babaie
 Title: DINO CPU Assignment 2
 ---
 
 # DINO CPU Assignment 2
 
 Originally from ECS 154B Lab 2, Winter 2019.
-Modified for ECS 154B Lab 1, Spring 2020.
+
+Modified for ECS 154B Lab 2, Winter 2021
+
+**Due on 1/24**: See [Submission](#submission) for details
 
 # Table of Contents
 
@@ -17,6 +20,7 @@ Modified for ECS 154B Lab 1, Spring 2020.
   * [Goals](#goals)
 * [Single cycle CPU design](#single-cycle-cpu-design)
 * [Control unit overview](#control-unit-overview)
+* [Part 0: NextPC unit overview](#part-0-nextpc-unit-overview)
 * [Part I: R-types](#part-i-r-types)
   * [R-type instruction details](#r-type-instruction-details)
   * [Testing the R-types](#testing-the-r-types)
@@ -38,8 +42,8 @@ Modified for ECS 154B Lab 1, Spring 2020.
   * [Testing the other memory instructions](#testing-the-other-memory-instructions)
 * [Part VII: Branch instructions](#part-vii-branch-instructions)
   * [Branch instruction details](#branch-instruction-details)
-  * [Updating your ALU Control Unit](#updating-your-alu-control-unit)
-    * [Testing your ALU control unit](#testing-your-alu-control-unit)
+  * [Updating your NextPC unit for branch instructions](#updating-your-NextPC-unit-for-branch-instructions)
+    * [Testing your NextPC unit](#testing-your-nextpc-unit)
 * [Part VIII: `jal`](#part-viii-jal)
   * [`jal` instruction details](#jal-instruction-details)
   * [Testing `jal`](#testing-jal)
@@ -61,7 +65,7 @@ Modified for ECS 154B Lab 1, Spring 2020.
 ![Cute Dino](../dino-128.png)
 
 In the last assignment, you implemented the ALU control and incorporated it into the DINO CPU to test some bare-metal R-type RISC-V instructions.
-In this assignment, you will implement the main control unit and update the ALU control unit.
+In this assignment, you will implement the main control unit and NextPC unit and update the ALU control unit (if needed).
 After implementing the individual components and successfully passing all individual component tests, you will combine these along with the other CPU components to complete the single-cycle DINO CPU.
 The simple in-order CPU design is based closely on the CPU model in Patterson and Hennessy's Computer Organization and Design.
 
@@ -73,14 +77,14 @@ We have made the following changes:
 - The solution for cpu.scala for Assignment 1 is included
 - The control unit includes the control signals for the R-type instructions
 
-You can check out the master branch to get the template code for this lab.
-If you want to use your solution from lab1 as a starting point, you can merge your commits with the `origin` master by running `git pull` or `git fetch; git merge origin/master`.
+You can check out the main branch to get the template code for this lab.
+If you want to use your solution from lab1 as a starting point, you can merge your commits with the `origin` main by running `git pull` or `git fetch; git merge origin/main`.
 
 If you want to start over and use the provided solution, you can do the following (see [how to update your code](../documentation/updating-from-git.md) for more details):
 
 ```
-git clone https://github.com/jlpteaching/dinocpu-sq20
-cd dinocpu-sq20
+git clone https://github.com/jlpteaching/dinocpu-wq21
+cd dinocpu-wq21
 git merge origin/lab1-solution
 ```
 
@@ -119,7 +123,12 @@ In this assignment, you will be implementing the data path shown in the figure b
 You can extend your work from [Lab 1](./assignment-1.md), or you can take the updated code from [GitHub](https://github.com/jlpteaching/dinocpu/).
 You will be implementing everything in the diagram in Chisel (the `cpu.scala` file only implements the R-type instructions), which includes the code for the MUXes.
 Then, you will wire all of the components together.
-You will also implement the [control unit](#control-unit-overview) and update the [alu control unit](#updating-your-alu-control-unit).
+You will also implement the [control unit](#control-unit-overview), NextPC unit and update the alu control unit.
+
+**Important Notice:** 
+In order to get familiar with debugging your design using single stepper, ***we strongly encourage you to watch the tutorial video*** we have provided in the link below. You may have watched it while working on assignment1. As mentioned before, the videos were originally made for spring quarter 2020 (sq20). Just in case you wanted to use any command or text from these videos which contains 'sq20', you just need to convert it to 'wq21' to be applicable to your materials for the current quarter.
+
+[DinoCPU - Debugging your implementation](https://video.ucdavis.edu/playlist/dedicated/0_8bwr1nkj/0_kv1v647d)
 
 ![Single cycle DINO CPU without control wires](single-cycle-no-control.svg)
 
@@ -131,30 +140,31 @@ The control unit is used to determine how to set the control lines for the funct
 The control unit takes a single input, which is the 7-bit `opcode`.
 From that input, it generates the 13 control signals listed below as output.
 
+
+```scala
+itype         true if we're working on an itype instruction
+aluop         true for R-type and I-type, false otherwise
+xsrc          source for the first ALU/nextpc input (0 is readdata1, 1 is pc) 
+ysrc          source for the second ALU/nextpc input (0 is readdata2 and 1 is immediate)
+branch        true if branch
+jal           true if a jal
+jalr          true if a jalr instruction
+plus4         true if ALU should add 4 to inputx
+resultselect  false for result from alu, true for immediate
+memop         00 if not using memory, 10 if reading, and 11 if writing
+toreg         false for result from execute, true for data from memory
+regwrite      true if writing to the register file
+validinst     True if the instruction we're decoding is valid
 ```
-branch:       true if branch or jump and link (jal). update PC with immediate
-pcfromalu:    Use the pc from the ALU, not pc+4 or pc+imm
-jump:         True if we want to update the PC with pc+imm regardless of the ALU result
-memread:      true if we should read from memory
-memwrite:     true if writing to the data memory
-regwrite:     true if writing to the register file
-toreg:        0 for result from execute, 1 for data from memory
-resultselect: 00 for result from alu, 01 for immediate, 10 for pc+4
-alusrc:       source for the second ALU input (0 is readdata2 and 1 is immediate)
-pcadd:        Use PC as the input to the ALU
-itype:        True if we're working on an itype instruction
-aluop:        00 for ld/st, 10 for R-type, 01 for branch
-validinst:    True if the instruction we're decoding is valid
-```
 
-The following table specifies the `opcode` format and the control signals to be generated for some of the instruction types.
+The following table specifies the `opcode` format and the control signals to be generated for some of the instruction types.   
 
 
-| opcode  | opcode format | branch | pcfromalu | jump | memread | memwrite | regwrite | toreg | resultselect | alusrc | pcadd | itype | aluop | validinst  |
-|---------|---------------|--------|---------|----------|----------|-------|----------|--------|------------|-------|-----------|-------|-------|-------|
-| -       | default       | false  | false   | false    | false    | false   | false    | 0      | 0    | false | false     | false | 0     | false |
-| 0000000 | invalid       | false  | false   | false    | false    | false   | false    | 0      | 0    | false | false     | false | 0     | false |
-| 0110011 | R-type        | false  | false   | false    | false    | false   | true     | 0      | 0    | false | false     | false | 2     | true  |
+| opcode  | opcode format | itype  | aluop | xsrc  | ysrc  | branch | jal   | jalr  | plus4 | resultselect | memop | toreg | regwrite | validinst |
+|---------|---------------|--------|-------|-------|-------|--------|-------|-------|-------|--------------|-------|-------|----------|-----------|
+| -       | default       | false  | false | false | false | false  | false | false | false | false        | 0     | false | false    | false     |
+| 0000000 | invalid       | false  | false | false | false | false  | false | false | false | false        | 0     | false | false    | false     |
+| 0110011 | R-type        | false  | true  | false | false | false  | false | false | false | false        | 0     | false | true     | true      |     
 
 We have given you the control signals for the R-type instructions.
 You must fill in all of the other instructions in the table in `src/main/scala/components/control.scala`.
@@ -164,7 +174,7 @@ Given the input opcode, you must generate the correct control signals.
 The template code from `src/main/scala/components/control.scala` is shown below.
 You will fill in where it says *Your code goes here*.
 
-```
+```scala
 // Control logic for the processor
 
 package dinocpu.components
@@ -177,68 +187,69 @@ import chisel3.util.{BitPat, ListLookup}
  *
  * Input: opcode:     Opcode from instruction
  *
- * Output: branch        true if branch or jump and link (jal). update PC with immediate
- * Output: pcfromalu     Use the pc from the ALU, not pc+4 or pc+imm
- * Output: jump          True if we want to update the PC with pc+imm regardless of the ALU result
- * Output: memread       true if we should read from memory
- * Output: memwrite      true if writing to the data memory
+ * Output: itype         true if we're working on an itype instruction
+ * Output: aluop         true for R-type and I-type, false otherwise
+ * Output: xsrc          source for the first ALU/nextpc input (0 is readdata1, 1 is pc) 
+ * Output: ysrc          source for the second ALU/nextpc input (0 is readdata2 and 1 is immediate)
+ * Output: branch        true if branch
+ * Output: jal           true if a jal
+ * Output: jalr          true if a jalr instruction
+ * Output: plus4         true if ALU should add 4 to inputx
+ * Output: resultselect  false for result from alu, true for immediate
+ * Output: memop         00 if not using memory, 10 if reading, and 11 if writing
+ * Output: toreg         false for result from execute, true for data from memory
  * Output: regwrite      true if writing to the register file
- * Output: toreg         0 for result from execute, 1 for data from memory
- * Output: resultselect  00 for result from alu, 01 for immediate, 10 for pc+4
- * Output: alusrc        source for the second ALU input (0 is readdata2 and 1 is immediate)
- * Output: pcadd         Use PC as the input to the ALU
- * Output: itype         True if we're working on an itype instruction
- * Output: aluop         00 for ld/st, 10 for R-type, 01 for branch
  * Output: validinst     True if the instruction we're decoding is valid
  *
  * For more information, see section 4.4 of Patterson and Hennessy.
- * This follows figure 4.22.
+ * This follows figure 4.22 somewhat.
  */
 
 class Control extends Module {
   val io = IO(new Bundle {
     val opcode = Input(UInt(7.W))
 
-    val branch       = Output(Bool())
-    val pcfromalu    = Output(Bool())
-    val jump         = Output(Bool())
-    val memread      = Output(Bool())
-    val memwrite     = Output(Bool())
-    val regwrite     = Output(Bool())
-    val toreg        = Output(UInt(1.W))
-    val resultselect = Output(UInt(2.W))
-    val alusrc       = Output(Bool())
-    val pcadd        = Output(Bool())
     val itype        = Output(Bool())
-    val aluop        = Output(UInt(2.W))
+    val aluop        = Output(Bool())
+    val xsrc         = Output(Bool())
+    val ysrc         = Output(Bool())
+    val branch       = Output(Bool())
+    val jal          = Output(Bool())
+    val jalr         = Output(Bool())
+    val plus4        = Output(Bool())
+    val resultselect = Output(Bool())
+    val memop        = Output(UInt(2.W))
+    val toreg        = Output(Bool())
+    val regwrite     = Output(Bool())
     val validinst    = Output(Bool())
   })
 
   val signals =
     ListLookup(io.opcode,
-      /*default*/           List(false.B, false.B,   false.B, false.B,   false.B,  false.B,  0.U,   false.B,      false.B, false.B, false.B, 0.U,   false.B),
-      Array(              /*     branch,  pcfromalu, jump,    memread,   memwrite, regwrite, toreg, resultselect, alusrc,  pcadd,   itype,   aluop, validinst */
-      // R-format
-      BitPat("b0110011") -> List(false.B, false.B,   false.B, false.B,   false.B,  true.B,   0.U,   0.U,          false.B, false.B, false.B, 2.U,   true.B),
+      /*default*/           List(false.B, false.B, false.B, false.B, false.B, false.B, false.B, false.B, false.B,      0.U,   false.B, false.B,  false.B),
 
+      Array(              /*     itype,   aluop,   xsrc,    ysrc,    branch,  jal,     jalr     plus4,   resultselect, memop, toreg,   regwrite, validinst */
+      // R-format
+      BitPat("b0110011") -> List(false.B, true.B,  false.B, false.B, false.B, false.B, false.B, false.B, false.B,      0.U,   false.B, true.B,   true.B),
+      
       // Your code goes here.
       // Remember to make sure to have commas at the end of each line, except for the last one.
-
+      
       ) // Array
     ) // ListLookup
 
-  io.branch       := signals(0)
-  io.pcfromalu    := signals(1)
-  io.jump         := signals(2)
-  io.memread      := signals(3)
-  io.memwrite     := signals(4)
-  io.regwrite     := signals(5)
-  io.toreg        := signals(6)
-  io.resultselect := signals(7)
-  io.alusrc       := signals(8)
-  io.pcadd        := signals(9)
-  io.itype        := signals(10)
-  io.aluop        := signals(11)
+  io.itype        := signals(0)
+  io.aluop        := signals(1)
+  io.xsrc         := signals(2)
+  io.ysrc         := signals(3)
+  io.branch       := signals(4)
+  io.jal          := signals(5)
+  io.jalr         := signals(6)
+  io.plus4        := signals(7)
+  io.resultselect := signals(8)
+  io.memop        := signals(9)
+  io.toreg        := signals(10)
+  io.regwrite     := signals(11)
   io.validinst    := signals(12)
 }
 ```
@@ -259,15 +270,83 @@ There may be some cases where some control signals could be 1 or 0 (i.e., you do
 You are *required* to set these lines to 0 for this assignment.
 If you do not set these lines to 0, you will not pass the control unit test on Gradescope.
 
+
+# Part 0: NextPC unit overview
+
+In the last assignment, when you were required to run your CPU for multiple cycles, you used a simple adder to generate the next value for the pc which was simply pc+4 in all cases. In this assignment you will implement a much smarter unit, NextPC, which is responsible for the next value that must be assigned to the pc for the next cycle.
+
+The NextPC unit recieves eight inputs:
+
+* `branch`, `jal`, `jalr`, which are boolean and come from the control unit. 
+* `inputx` and `inputy`, which come from the Register File.
+* `funct3`, which comes from the instruction.
+* `pc`, which is the pc.
+* `imm`, which comes from the Immediate Generator unit.
+
+The NextPC unit generates two outputs:
+
+* `nextpc`, which is 32 bits unsigned integer value that must be assigned to the pc for the next cycle.
+* `taken`, which is boolean showing if a branch or jump result is taken or not.
+
+Given the inputs, you must generate the correct value for nextpc and taken. The template code from `src/main/scala/components/nextpc.scala` is shown below.
+
+```scala
+// Logic to calculate the next pc
+
+package dinocpu.components
+
+import chisel3._
+
+/**
+ * Next PC unit. This takes various inputs and outputs the next address of the next instruction.
+ *
+ * Input: branch         true if executing a branch instruction
+ * Input: jal            true if executing a jal
+ * Input: jalr           true if executing a jalr
+ * Input: inputx         first input
+ * Input: inputy         second input
+ * Input: funct3         the funct3 from the instruction
+ * Input: pc             the *current* program counter for this instruction
+ * Input: imm            the sign-extended immediate
+ *
+ * Output: nextpc        the address of the next instruction
+ * Output: taken         true if the next pc is not pc+4
+ *
+ */
+class NextPC extends Module {
+  val io = IO(new Bundle {
+    val branch  = Input(Bool())
+    val jal     = Input(Bool())
+    val jalr    = Input(Bool())
+    val inputx  = Input(UInt(32.W))
+    val inputy  = Input(UInt(32.W))
+    val funct3  = Input(UInt(3.W))
+    val pc      = Input(UInt(32.W))
+    val imm     = Input(UInt(32.W))
+
+    val nextpc  = Output(UInt(32.W))
+    val taken   = Output(Bool())
+  })
+
+  io.nextpc := io.pc + 4.U
+  io.taken  := false.B
+
+  // Your code goes here
+}
+```
+In this template, the outputs, `nextpc` and `taken`, are set to always be pc+4 and false, respectively. 
+
+Before starting Part I, you must remove the parts related to pc+4 and replace it with an instance of NextPC unit and create proper wire connections for it. For this purpose, you must update `src/main/scala/single-cycle/cpu.scala`. In the next sections, you will gradually complete the body of NextPC unit.
+
 # Part I: R-types
 
 In the last assignment, you implemented a subset of the RISC-V data path for just R-type instructions.
 This did not require a control unit since there were no need for extra MUXes.
-In this assignment, you will be implementing the rest of the RISC-V instructions, so you will need to use the control unit.
+However, in this assignment, you will be implementing the rest of the RISC-V instructions, so you will need to use the control unit.
 
 The first step is to hook up the control unit and get the R-type instructions working again.
-You shouldn't have to change all that much code in `cpu.scala` from the first assignment.
-All you have to do is to hook up the `opcode` to the input of the control unit.
+You shouldn't have to change all that much code in `cpu.scala` from the first assignment after you applying changes regarding [NextPC unit](#part0-nextpc-unit-overview).
+All you have to do is to hook up the `opcode` to the input of the control unit and its output `aluop` and `itype` to the alu control unit.
 We have already implemented the R-type control logic for you.
 You can also use the appropriate signals generated from the control unit (e.g., `regwrite`) to drive your data path.
 
@@ -299,6 +378,9 @@ sbt:dinocpu> testOnly dinocpu.SingleCycleRTypeTesterLab2
 
 Next, you will implement the I-type instructions.
 These are mostly the same as the the R-types, except that the second operand comes from the immediate value contained within the instruction, rather than another register.
+
+**Important**: The immediate generator will produce the shifted and sign extended value!
+You do not need to shift the immediate value outside of the immediate generator.
 
 To implement the I-types, you should first extend the table in `control.scala`.
 Then you can add the appropriate MUXes to the CPU (in `cpu.scala`) and wire the control signals to those MUXes.
@@ -345,7 +427,7 @@ You will also need to incorporate the data memory into your data path, starting 
 The data memory port I/O is not as simple as the I/O for other modules.
 It's built to be modular to allow different kinds of memories to be used with your CPU design.
 We are planning to explore this further in Lab 4.
-If you want to see the details, you can find them in the [mem-port-io.scala](https://github.com/jlpteaching/dinocpu/blob/master/src/main/scala/memory/memory-port-io.scala) file.
+If you want to see the details, you can find them in the [mem-port-io.scala](https://github.com/jlpteaching/dinocpu/blob/main/src/main/scala/memory/memory-port-io.scala) file.
 
 The I/O for the data memory port is shown below.
 Don't forget that the instruction and data memory ports look weird to use.
@@ -415,7 +497,7 @@ R[rd] = imm << 12
 **Important**: The immediate generator will produce the shifted and sign extended value!
 You do not need to shift the immediate value outside of the immediate generator.
 
-Use the diagram as a hint on how to modify your data path for this instruction.
+Use the diagram as a hint on how to modify your data path and control unit for this instruction.
 There are multiple different ways to implement this instruction (last year, we used a different design), so be careful to follow the diagram above!
 
 ## `auipc` instruction details
@@ -432,6 +514,7 @@ The instruction has the following effect.
 ```
 R[rd] = pc + imm << 12
 ```
+Like previous part, use the diagram as a hint on how to modify your data path and control unit for this instruction.
 
 ## Testing the U-types
 
@@ -525,8 +608,8 @@ sbt:dinocpu> testOnly dinocpu.SingleCycleLoadStoreTesterLab2
 # Part VII: Branch instructions
 
 This part is a little more involved than the previous instructions.
-First, you will update the ALU control unit.
-Then, you will wire up the other necessary MUXes.
+First, you will update the NextPC unit.
+Then, you will update other necessary modules (e.g. control unit, ALU control if needed, etc) and then wire up the other necessary MUXes.
 
 ## Branch instruction details
 
@@ -561,11 +644,11 @@ else
   pc = pc + 4
 ```
 
-## Updating your ALU control unit
+## Updating your NextPC unit for branch instructions
 
-In this part you will be updating the ALU control component to account for branch
-instructions. Similar to the CPU implementation in the book, the ALU will compute
-whether or not a branch is taken (outputting its result in the least significant bit).
+In this part you will be updating the NextPC component to account for branch
+instructions. Similar to the CPU implementation in the book, the NextPC will compute
+whether or not a branch is taken (outputting its result in `taken`, true if the branch is taken and false if the branch is not taken).
 
 You must take the RISC-V ISA specification and implement the proper control to choose the right type of branch test.
 You can find the specification in the following places:
@@ -575,46 +658,32 @@ You can find the specification in the following places:
 * Chapter 2 of the RISC-V reader
 * in the front of the Computer Organization and Design book
 
-The following table details the `operation` output for each branch type and which values
-produce which results.
-
-|      |      |
-|------|------|
-| 1101 | beq  |
-| 1110 | bne  |
-| 1000 | blt  |
-| 1011 | bge  |
-| 0101 | bltu |
-| 1100 | bgeu |
-
-Just as you did in the previous assignment, you must now append to your ALU control
-implementation additional control to pick the right branch ALU operation. As a
-helpful tip, it's important to remember that the `aluop` wire helps differentiate
-between different instructions (00 for ld/st, 10 for R-type, 01 for branch).
+You must now extend NextPC module with additional control to generate correct value for `nextpc` and correct result for `taken`. 
+As a helpful tip, it's important to remember that the `funct3` wire helps differentiate between different branch instructions.
 
 See [the Chisel getting started guide](../documentation/chisel-notes/getting-started.md) for examples.
 You may also find the [Chisel cheat sheet](https://chisel.eecs.berkeley.edu/2.2.0/chisel-cheatsheet.pdf) helpful.
 
-**HINT:** Use Chisel's when` / `elsewhen` / `otherwise`, or `MuxCase` syntax.
+**HINT:** Use Chisel's `when` / `elsewhen` / `otherwise`, or `MuxCase` syntax.
 You can also use normal operators, such as `<`, `>`, `===`, `=/=`, etc.
 
-## Testing your ALU control unit
+**Important Note:** In this assignment you will not use the `taken` output of NextPC unit anywhere in your single cycle CPU. However, we test if your NextPC unit generates correct value for it. You will utilize `taken` in the next assignment.
 
-We have updated the tests for your alu control unit. The tests, along with the other lab2 tests, are in `src/test/scala/labs/Lab2Test.scala`.
+## Testing your NextPC unit
 
-In this part of the assignment, you only need to run the alu control unit tests.
+We have updated the tests for your NextPC unit. The tests, along with the other lab2 tests, are in `src/test/scala/labs/Lab2Test.scala`.
+
+In this part of the assignment, you only need to run the NextPC unit tests.
 To run just these tests, you can use the sbt comand `testOnly`, as demonstrated below.
 
 ```
-sbt:dinocpu> testOnly dinocpu.ALUControlTesterLab2
+sbt:dinocpu> testOnly dinocpu.NextPCBranchTesterLab2
 ```
 
 ## Implementing branch instructions
 
-Next, you need to wire the `result` from the ALU into the control path (specifically `alu.io.result(0)`).
+Next, you need to wire the `nextpc` output from the NextPC unit into the data path.
 You can follow the diagram given in [the single cycle CPU design section](#single-cycle-cpu-design).
-Note that the diagram does not specify what to do with the least significant bit of the `result` from the
-ALU. You must add the required logic to drive the correct MUX output based on this output.
 
 ## Testing the branch instructions
 
@@ -623,8 +692,6 @@ You can run the tests for the branch instructions with the following command.
 ```
 sbt:dinocpu> testOnly dinocpu.SingleCycleBranchTesterLab2
 ```
-
-If you want to test the control unit, use the command [above](#testing-your-alu-control-unit).
 
 # Part VIII: `jal`
 
@@ -647,7 +714,15 @@ pc = pc + imm
 R[rd] = pc + 4
 ```
 
+You must properly update any required entities in your code (e.g. the control unit, NextPC unit, etc). Finally, you should wire up any necessary MUXes.
+
 ## Testing `jal`
+
+You can run the tests for changes you made for NextPC in this part with the following command:
+
+```
+sbt:dinocpu> testOnly dinocpu.NextPCJalTesterLab2
+```
 
 You can run the tests for this part with the following command:
 
@@ -658,7 +733,7 @@ sbt:dinocpu> testOnly dinocpu.SingleCycleJALTesterLab2
 # Part IX: `jalr`
 
 `jalr` is very similar to `jal`, with one difference.
-However, unlike `jal`, `jalr` has the format of an I-type instruction.
+Unlike `jal`, `jalr` has the format of an I-type instruction.
 
 ## `jalr` instruction details
 
@@ -677,12 +752,28 @@ pc = R[rs1] + imm
 R[rd] = pc + 4
 ```
 
+You must properly update any required entities in your code (e.g. the control unit, NextPC unit, etc). Finally, you should wire up any necessary MUXes.
+
+You can run the tests for changes you made for NextPC in this part with the following command:
+
+```
+sbt:dinocpu> testOnly dinocpu.NextPCJalrTesterLab2
+```
+
 ## Testing `jalr`
 
 You can run the tests for this part with the following command:
 
 ```
 sbt:dinocpu> testOnly dinocpu.SingleCycleJALRTesterLab2
+```
+
+# Testing the entire `NextPC` module
+
+Now, that you have fully implemented the NextPC unit, you can run the tests for the whole unit with the following command:
+
+```
+sbt:dinocpu> testOnly dinocpu.NextPCTesterLab2
 ```
 
 # Part X: Full applications
@@ -699,6 +790,12 @@ We have provided four applications for you.
 
 If you have passed all of the above tests, your CPU should execute these applications with no issues!
 If you do not pass a test, you may need to dig into the debug output of the test.
+
+**Important Note:** We strongly encourage you to use [single stepper](../documentation/single-stepping.md) to test your design for full applications. It will let you step through the execution one cycle at a time and print information as you go. Details on how to use the single stepper can be found in the [documentation](../documentation/single-stepping.md). You can also watch the video we have provided in the link below to learn how to debug using single stepper. As mentioned earlier, the videos were originally made for spring quarter 2020 (sq20). Just in case you wanted to use any command or text from these videos which contains 'sq20', you just need to convert it to 'wq21' to be applicable to your materials for the current quarter.
+
+[DinoCPU - Debugging your implementation](https://video.ucdavis.edu/playlist/dedicated/0_8bwr1nkj/0_kv1v647d)
+
+
 
 ## Testing full applications
 
@@ -734,6 +831,7 @@ Failure to adhere to the instructions will result in a loss of points.
 You will upload the three files that you changed to Gradescope on the [Lab 2]() assignment.
 
 - `src/main/scala/components/alucontrol.scala`
+- `src/main/scala/components/nextpc.scala`
 - `src/main/scala/components/control.scala`
 - `src/main/scala/single-cycle/cpu.scala`
 
@@ -758,8 +856,8 @@ GitHub now allows everybody to create unlimited private repositories for up to t
 
 # Hints
 
-- Start early! There is a steep learning curve for Chisel, so start early and ask questions on Campuswire and in discussion.
-- If you need help, come to office hours for the TAs, or post your questions on Campuswire.
+- Start early! There is a steep learning curve for Chisel, so start early and ask questions on [Discord](https://discord.com/channels/791087361273757726/791421963897667614) and in discussion.
+- If you need help, come to office hours for the TA, or post your questions on [Discord](https://discord.com/channels/791087361273757726/791421963897667614).
 - See [common errors](../documentation/common-errors.md) for some common errors and their solutions.
 
 ## Single stepper
