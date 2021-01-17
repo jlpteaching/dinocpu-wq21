@@ -12,7 +12,6 @@ First, you will implement the ALU control unit that you will use in the single c
 Then, you will begin implementing the single-cycle CPU datapath.
 By the end of this assignment you will be able to correctly execute 10 RISC-V instructions (about 25%)!
 
-![Under Construction!](under-construction.png)
 ## [Assignment 2: A single-cycle CPU design](assignments/assignment-2.md)
 
 In this assignment, you will extend what you started in [assignment 1](assignments/assignment-1.md) and implement the rest of the RISC-V RV32I instruction set!
@@ -22,6 +21,8 @@ At the end, you will be able to run *real applications* compiled with GCC on you
 -----------------------------------------------------------------------
 
 EVERYTHING BELOW THIS IS NOT READY YET!
+
+![Under Construction!](under-construction.png)
 
 ## [Assignment 3: A pipelined CPU design](assignments/assignment-3.md)
 
