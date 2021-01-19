@@ -863,7 +863,7 @@ GitHub now allows everybody to create unlimited private repositories for up to t
 ## Single stepper
 
 You can also use the [single stepper](../documentation/single-stepping.md) to step through the execution one cycle at a time and print information as you go.
-Details on how to use the single stepper can be found in the [documentation](../documentation/single-stepping.md).
+Details on how to use the single stepper can be found in the [documentation](../documentation/single-stepping.md) and in [DinoCPU - Debugging your implementation](https://video.ucdavis.edu/playlist/dedicated/0_8bwr1nkj/0_kv1v647d).
 
 ## `printf` debugging
 
