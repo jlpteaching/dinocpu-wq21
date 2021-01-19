@@ -125,7 +125,7 @@ You will be implementing everything in the diagram in Chisel (the `cpu.scala` fi
 Then, you will wire all of the components together.
 You will also implement the [control unit](#control-unit-overview), NextPC unit and update the alu control unit.
 
-**Important Notice:** 
+**Important Notice:**
 In order to get familiar with debugging your design using single stepper, ***we strongly encourage you to watch the tutorial video*** we have provided in the link below. You may have watched it while working on assignment1. As mentioned before, the videos were originally made for spring quarter 2020 (sq20). Just in case you wanted to use any command or text from these videos which contains 'sq20', you just need to convert it to 'wq21' to be applicable to your materials for the current quarter.
 
 [DinoCPU - Debugging your implementation](https://video.ucdavis.edu/playlist/dedicated/0_8bwr1nkj/0_kv1v647d)
@@ -144,7 +144,7 @@ From that input, it generates the 13 control signals listed below as output.
 ```scala
 itype         true if we're working on an itype instruction
 aluop         true for R-type and I-type, false otherwise
-xsrc          source for the first ALU/nextpc input (0 is readdata1, 1 is pc) 
+xsrc          source for the first ALU/nextpc input (0 is readdata1, 1 is pc)
 ysrc          source for the second ALU/nextpc input (0 is readdata2 and 1 is immediate)
 branch        true if branch
 jal           true if a jal
@@ -157,14 +157,14 @@ regwrite      true if writing to the register file
 validinst     True if the instruction we're decoding is valid
 ```
 
-The following table specifies the `opcode` format and the control signals to be generated for some of the instruction types.   
+The following table specifies the `opcode` format and the control signals to be generated for some of the instruction types.
 
 
 | opcode  | opcode format | itype  | aluop | xsrc  | ysrc  | branch | jal   | jalr  | plus4 | resultselect | memop | toreg | regwrite | validinst |
 |---------|---------------|--------|-------|-------|-------|--------|-------|-------|-------|--------------|-------|-------|----------|-----------|
 | -       | default       | false  | false | false | false | false  | false | false | false | false        | 0     | false | false    | false     |
 | 0000000 | invalid       | false  | false | false | false | false  | false | false | false | false        | 0     | false | false    | false     |
-| 0110011 | R-type        | false  | true  | false | false | false  | false | false | false | false        | 0     | false | true     | true      |     
+| 0110011 | R-type        | false  | true  | false | false | false  | false | false | false | false        | 0     | false | true     | true      |
 
 We have given you the control signals for the R-type instructions.
 You must fill in all of the other instructions in the table in `src/main/scala/components/control.scala`.
@@ -189,7 +189,7 @@ import chisel3.util.{BitPat, ListLookup}
  *
  * Output: itype         true if we're working on an itype instruction
  * Output: aluop         true for R-type and I-type, false otherwise
- * Output: xsrc          source for the first ALU/nextpc input (0 is readdata1, 1 is pc) 
+ * Output: xsrc          source for the first ALU/nextpc input (0 is readdata1, 1 is pc)
  * Output: ysrc          source for the second ALU/nextpc input (0 is readdata2 and 1 is immediate)
  * Output: branch        true if branch
  * Output: jal           true if a jal
@@ -231,10 +231,10 @@ class Control extends Module {
       Array(              /*     itype,   aluop,   xsrc,    ysrc,    branch,  jal,     jalr     plus4,   resultselect, memop, toreg,   regwrite, validinst */
       // R-format
       BitPat("b0110011") -> List(false.B, true.B,  false.B, false.B, false.B, false.B, false.B, false.B, false.B,      0.U,   false.B, true.B,   true.B),
-      
+
       // Your code goes here.
       // Remember to make sure to have commas at the end of each line, except for the last one.
-      
+
       ) // Array
     ) // ListLookup
 
@@ -277,7 +277,7 @@ In the last assignment, when you were required to run your CPU for multiple cycl
 
 The NextPC unit recieves eight inputs:
 
-* `branch`, `jal`, `jalr`, which are boolean and come from the control unit. 
+* `branch`, `jal`, `jalr`, which are boolean and come from the control unit.
 * `inputx` and `inputy`, which come from the Register File.
 * `funct3`, which comes from the instruction.
 * `pc`, which is the pc.
@@ -334,7 +334,7 @@ class NextPC extends Module {
   // Your code goes here
 }
 ```
-In this template, the outputs, `nextpc` and `taken`, are set to always be pc+4 and false, respectively. 
+In this template, the outputs, `nextpc` and `taken`, are set to always be pc+4 and false, respectively.
 
 Before starting Part I, you must remove the parts related to pc+4 and replace it with an instance of NextPC unit and create proper wire connections for it. For this purpose, you must update `src/main/scala/single-cycle/cpu.scala`. In the next sections, you will gradually complete the body of NextPC unit.
 
@@ -658,7 +658,7 @@ You can find the specification in the following places:
 * Chapter 2 of the RISC-V reader
 * in the front of the Computer Organization and Design book
 
-You must now extend NextPC module with additional control to generate correct value for `nextpc` and correct result for `taken`. 
+You must now extend NextPC module with additional control to generate correct value for `nextpc` and correct result for `taken`.
 As a helpful tip, it's important to remember that the `funct3` wire helps differentiate between different branch instructions.
 
 See [the Chisel getting started guide](../documentation/chisel-notes/getting-started.md) for examples.
@@ -828,7 +828,7 @@ Failure to adhere to the instructions will result in a loss of points.
 
 ## Code portion
 
-You will upload the three files that you changed to Gradescope on the [Lab 2]() assignment.
+You will upload the three files that you changed to Gradescope on the [Lab 2](https://www.gradescope.com/courses/216663/assignments/948998/) assignment.
 
 - `src/main/scala/components/alucontrol.scala`
 - `src/main/scala/components/nextpc.scala`
