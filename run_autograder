@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 to_submit=("src/main/scala/components/alucontrol.scala"
+           "src/main/scala/components/nextpc.scala"
+           "src/main/scala/components/control.scala"
            "src/main/scala/single-cycle/cpu.scala")
 
 # Copy the files from /autograder/submission to the proper location
@@ -15,7 +17,7 @@ done
 cd /dinocpu
 
 # Run the test. This should generate the json file in /autograder/results
-sbt "Grader / testOnly dinocpu.test.grader.Lab1Grader"
+sbt "Grader / testOnly dinocpu.test.grader.Lab2Grader"
 
 # Remove all of the colors from the json
 cd /autograder/results
