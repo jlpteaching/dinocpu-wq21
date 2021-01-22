@@ -662,7 +662,7 @@ You must now extend NextPC module with additional control to generate correct va
 As a helpful tip, it's important to remember that the `funct3` wire helps differentiate between different branch instructions.
 
 See [the Chisel getting started guide](../documentation/chisel-notes/getting-started.md) for examples.
-You may also find the [Chisel cheat sheet](https://chisel.eecs.berkeley.edu/2.2.0/chisel-cheatsheet.pdf) helpful.
+You may also find the [Chisel cheat sheet](https://www.chisel-lang.org/doc/chisel-cheatsheet3.pdf/) helpful.
 
 **HINT:** Use Chisel's `when` / `elsewhen` / `otherwise`, or `MuxCase` syntax.
 You can also use normal operators, such as `<`, `>`, `===`, `=/=`, etc.
