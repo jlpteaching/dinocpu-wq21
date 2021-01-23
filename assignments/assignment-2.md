@@ -784,9 +784,9 @@ In this final part of the assignment, you will run some full RISC-V applications
 We have provided four applications for you.
 
 * `fibonacci`, which computes the nth Fibonacci number. The initial value of `t1` contains the Fibonacci number to compute, and after computing, the value is found in `t0`.
-* `naturalsum`
-* `multiplier`
-* `divider`
+* `naturalsum`, which computes the sum of numbers from 1 to 10 and stores the result (55) in the data memory at address 0x400 (and it can be found in `t0`).
+* `multiplier`, which multiplies two numbers initially in registers `t0` and `t1`. It stores the result of multiplication in the data memory at address 0x500 (and it can be found in `t0`).
+* `divider`, which divides the value in `t0` by the value in `t1` and the results can be found in `t2` and stored in data memory at address 0x450.
 
 If you have passed all of the above tests, your CPU should execute these applications with no issues!
 If you do not pass a test, you may need to dig into the debug output of the test.
