@@ -8,8 +8,8 @@ import chisel3.util._
 /**
  * The ALU control unit
  *
- * Output: itype      true if we're working on an itype instruction
- * Output: aluop      true for R-type and I-type, false otherwise
+ * Input:  itype      true if we're working on an itype instruction
+ * Input:  aluop      true for R-type and I-type, false otherwise
  * Input:  funct7     the most significant bits of the instruction
  * Input:  funct3     the middle three bits of the instruction (12-14)
  * Output: operation  What we want the ALU to do.
