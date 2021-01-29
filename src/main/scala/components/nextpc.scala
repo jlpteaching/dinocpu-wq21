@@ -35,8 +35,28 @@ class NextPC extends Module {
     val taken   = Output(Bool())
   })
 
-  io.nextpc := io.pc + 4.U
-  io.taken  := false.B
+  when (io.branch) {
+    when (io.funct3 === "b000".U)      { io.taken := io.inputx === io.inputy } // beq
+    .elsewhen (io.funct3 === "b001".U) { io.taken := io.inputx =/= io.inputy } // bne
+    .elsewhen (io.funct3 === "b100".U) { io.taken := (io.inputx.asSInt < io.inputy.asSInt).asUInt } // blt
+    .elsewhen (io.funct3 === "b101".U) { io.taken := (io.inputx.asSInt >= io.inputy.asSInt).asUInt } // bge
+    .elsewhen (io.funct3 === "b110".U) { io.taken := io.inputx < io.inputy } // bltu
+    .elsewhen (io.funct3 === "b111".U) { io.taken := io.inputx >= io.inputy } // bgeu
+    .otherwise                         { io.taken := false.B } // invalid
 
-  // Your code goes here
+    when (io.taken) {
+      io.nextpc := io.pc + io.imm
+    } .otherwise {
+      io.nextpc := io.pc + 4.U
+    }
+  } .elsewhen (io.jal) {
+    io.taken := true.B // All jumps are taken
+    io.nextpc := io.pc + io.imm
+  } .elsewhen (io.jalr) {
+    io.taken := true.B // All jumps are taken
+    io.nextpc := io.inputx + io.imm
+  } .otherwise {
+    io.nextpc := io.pc + 4.U
+    io.taken  := false.B
+  }
 }
