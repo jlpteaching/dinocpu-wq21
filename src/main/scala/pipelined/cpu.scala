@@ -64,7 +64,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   }
 
   // All of the structures required
-  val pc              = RegInit(0.U)
+  val pc              = dontTouch(RegInit(0.U))
   val control         = Module(new Control())
   val registers       = Module(new RegisterFile())
   val aluControl      = Module(new ALUControl())
@@ -93,10 +93,11 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   // Remove these as you hook up each one
   registers.io  := DontCare
   aluControl.io := DontCare
+  control.io    := DontCare
   alu.io        := DontCare
   immGen.io     := DontCare
   pcPlusFour.io := DontCare
-  branchAdd.io  := DontCare
+  nextPCmod.io  := DontCare
   io.dmem       := DontCare
   forwarding.io := DontCare
   hazard.io     := DontCare
