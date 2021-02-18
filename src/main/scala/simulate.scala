@@ -122,8 +122,14 @@ object simulate {
     } else { // Original single-step format
       (args(1), "combinational", "combinational-port", 0)
     }
+    val bp =
+      if (args.length > 2) {
+        args(2)
+      } else {
+        ""
+      }
 
-    val driver = new CPUTesterDriver(cpuType, "", test.binary, test.extraName, memType,
+    val driver = new CPUTesterDriver(cpuType, bp, test.binary, test.extraName, memType,
       memPortType, latency)
     driver.initRegs(test.initRegs)
     driver.initMemory(test.initMem)

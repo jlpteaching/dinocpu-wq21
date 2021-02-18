@@ -97,6 +97,7 @@ class CPUTesterDriver(cpuType: String,
     val modules = conf.cpuType match {
       case "single-cycle" => SingleCycleCPUInfo.getModules()
       case "pipelined" => PipelinedCPUInfo.getModules()
+      case "pipelined-bp" => PipelinedCPUBPInfo.getModules()
       case "pipelined-non-combin" => PipelinedNonCombinCPUInfo.getModules()
       case other => {
         println(s"Cannot dump info for CPU type ${other}")
@@ -115,6 +116,7 @@ class CPUTesterDriver(cpuType: String,
     val modules = conf.cpuType match {
       case "single-cycle" => SingleCycleCPUInfo.getModules()
       case "pipelined" => PipelinedCPUInfo.getModules()
+      case "pipelined-bp" => PipelinedCPUBPInfo.getModules()
       case "pipelined-non-combin" => PipelinedNonCombinCPUInfo.getModules()
       case other => {
         println(s"Cannot dump info for CPU type ${other}")
@@ -136,7 +138,12 @@ class CPUTesterDriver(cpuType: String,
   }
 
   def printAllPipeRegs(): Unit = {
-    for (reg <- PipelinedCPUInfo.getPipelineRegs()) {
+    val regs = conf.cpuType match {
+      case "pipelined" => PipelinedCPUInfo.getPipelineRegs()
+      case "pipelined-bp" => PipelinedCPUBPInfo.getPipelineRegs()
+      case "pipelined-non-combin" => PipelinedNonCombinCPUInfo.getPipelineRegs()
+    }
+    for (reg <- regs) {
       printPipeReg(reg)
     }
   }
