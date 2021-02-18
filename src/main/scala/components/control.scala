@@ -63,9 +63,9 @@ class Control extends Module {
       // branch
       BitPat("b1100011") -> List(false.B, false.B, false.B, false.B, true.B,  false.B, false.B, false.B, false.B,      0.U,   false.B, false.B,  true.B),
       // lui
-      BitPat("b0110111") -> List(false.B, false.B, false.B, false.B, false.B, true.B,  false.B, false.B, true.B,       0.U,   false.B, true.B,   true.B),
+      BitPat("b0110111") -> List(false.B, false.B, false.B, false.B, false.B, false.B, false.B, false.B, true.B,       0.U,   false.B, true.B,   true.B),
       // auipc
-      BitPat("b0010111") -> List(false.B, false.B, true.B,  true.B,  false.B, true.B,  false.B, false.B, false.B,      0.U,   false.B, true.B,   true.B),
+      BitPat("b0010111") -> List(false.B, false.B, true.B,  true.B,  false.B, false.B, false.B, false.B, false.B,      0.U,   false.B, true.B,   true.B),
       // jal
       BitPat("b1101111") -> List(false.B, false.B, true.B,  false.B, false.B, true.B,  false.B, true.B,  false.B,      0.U,   false.B, true.B,   true.B),
       // jalr
