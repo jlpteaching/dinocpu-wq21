@@ -426,7 +426,7 @@ Failure to adhere to the instructions will result in a loss of points.
 
 ## Code portion
 
-You will upload the one files that you changed (`src/main/scala/components/hazard-bp.scala` and `src/main/scala/pipelined/cpu-bp.scala`) to Gradescope on the `Assignment 4: Code` assignment.
+You will upload the files that you changed (`src/main/scala/components/hazard-bp.scala` and `src/main/scala/pipelined/cpu-bp.scala`) to Gradescope on the `Assignment 4: Code` assignment.
 
 Once uploaded, Gradescope will automatically download and run your code.
 This should take less than 5 minutes.
