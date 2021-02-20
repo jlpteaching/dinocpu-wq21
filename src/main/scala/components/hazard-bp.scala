@@ -47,25 +47,22 @@ class HazardUnitBP extends Module {
 
   // Your code goes here
   when (io.exmem_taken === true.B) {
-    io.pcfromtaken  := true.B
-    io.pcstall      := false.B
-    io.if_id_stall  := false.B
+    // branch flush
+    io.pcSel := 1.U // use the PC from mem stage
+    io.if_id_flush  := true.B
     io.id_ex_flush  := true.B
     io.ex_mem_flush := true.B
-    io.if_id_flush  := true.B
-  }
-  .elsewhen(io.idex_memread === true.B && (io.idex_rd === io.rs1 || io.idex_rd === io.rs2)) {
-    io.pcfromtaken  := false.B
-    io.pcstall      := true.B
-    io.if_id_stall  := true.B
-    io.id_ex_flush  := true.B
-    io.ex_mem_flush := false.B
-    io.if_id_flush  := false.B
+  } 
+  .elsewhen (io.idex_memread === true.B &&
+        (io.idex_rd === io.rs1 || io.idex_rd === io.rs2)) {
+    // load to use hazard.
+    io.pcSel := 3.U
+    io.if_id_stall := true.B
+    io.id_ex_flush := true.B
   }
   .otherwise {
-    // default
-    io.pcfromtaken  := false.B
-    io.pcstall      := false.B
+    // keep default vals
+    io.pcSel        := 0.U
     io.if_id_stall  := false.B
     io.id_ex_flush  := false.B
     io.ex_mem_flush := false.B
