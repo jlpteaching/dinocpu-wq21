@@ -336,7 +336,7 @@ Your implementation of pipelined-bp CPU will affect the number of cycles it take
 | Branch Predictor | Finished after #cycles |
 |------------------|------------------------|
 | always-not-taken |        17569           |
-| always-take      |        17579           |
+| always-taken     |        17579           |
 | local            |        14587           |
 | global           |        14599           |
 
