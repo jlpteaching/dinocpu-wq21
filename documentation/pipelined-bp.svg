@@ -13,8 +13,8 @@
    version="1.1"
    id="SVGRoot"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   sodipodi:docname="pipelined-bp-2.svg"
-   inkscape:export-filename="C:\Users\Maryam\Desktop\New folder (4)\pipelined-bp.png"
+   sodipodi:docname="pipelined-bp.svg"
+   inkscape:export-filename="C:\Users\Maryam\Desktop\New folder (5)\pipelined-bp.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <sodipodi:namedview
@@ -24,11 +24,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="687.58055"
-     inkscape:cy="262.33944"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="635.28045"
+     inkscape:cy="225.24503"
      inkscape:document-units="in"
-     inkscape:current-layer="g886-6-5-7-0-2-4-0-0"
+     inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1027"
@@ -53,7 +53,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -4070,8 +4070,8 @@
        id="path1315-77-3-0-8-4-9-0-7"
        style="fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:0.0102947;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
-       style="fill:#ff0000;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.0100023px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 6.3080194,3.2710975 0.00769,-2.2542383"
+       style="fill:#ff0000;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.00583923px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 6.3079913,3.2710975 0.00775,-0.7626849"
        id="path1498-9-4-2"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0" />
@@ -4303,6 +4303,22 @@
            y="112.20602"
            style="fill:#ff0000;stroke-width:0.0897496"
            id="tspan2022">jalr</tspan></text>
+      <g
+         id="layer1-9"
+         transform="matrix(0,-0.39706777,0.484338,0,-317.66593,477.13521)">
+        <g
+           id="g4267"
+           transform="translate(7.433545,5.854649)">
+          <g
+             id="g4285">
+            <path
+               id="path2089"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.00913;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10.43;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+               d="m 991.90459,494.93125 c 2.06525,0 4.13053,0 6.19576,0 0.30603,0 0.65029,0.0357 1.03259,0.10698 0.3826,0.0713 0.7649,0.21396 1.14386,0.42795 0.3825,0.21073 0.7649,0.53492 1.1474,0.95961 0.3825,0.42793 0.6503,0.93044 0.8031,1.49779 0.153,0.57057 0.153,1.14116 0,1.71173 -0.153,0.57058 -0.4208,1.06983 -0.8031,1.49778 -0.3825,0.4247 -0.7649,0.74564 -1.1474,0.96285 -0.37876,0.21073 -0.76126,0.35338 -1.14386,0.4247 -0.3825,0.0713 -0.72656,0.10699 -1.03259,0.10699 -0.30596,0 -1.41508,0 -3.32735,0 -1.91237,0 -2.86841,0 -2.86841,0 0,0 0,-1.28382 0,-3.85143 z"
+               inkscape:connector-curvature="0" />
+          </g>
+        </g>
+      </g>
     </g>
     <path
        style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.0127282px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -4498,6 +4514,25 @@
        style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.0065592px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 12.604923,2.8117076 -0.164089,0.00262"
        id="path1486-4-0-9-9-7"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <path
+       style="display:inline;fill:#ff0000;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.00786956px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 6.2410321,3.9280463 0.00763,-1.407426"
+       id="path1498-9-4-2-9"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <ellipse
+       ry="0.018768968"
+       rx="0.022608744"
+       cy="3.9259157"
+       cx="6.2313786"
+       id="path1315-77-3-0-8-4-9-0-41"
+       style="display:inline;fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:0.0102947;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       style="display:inline;fill:#ff0000;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.0076647px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 6.3012166,2.3573051 0.00764,-1.333756"
+       id="path1498-9-4-2-9-2"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0" />
   </g>
