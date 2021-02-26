@@ -27,7 +27,7 @@ class Lab4Grader extends JUnitSuite {
       var error = ""
       for ((group, tests) <- InstTests.tests) {
         for (test <- tests) {
-          success = CPUTesterDriver(test, "pipelined-non-combin", "", "non-combinational", "non-combinational-port", 1) && success
+          success = CPUTesterDriver(test, "pipelined", "local") && success
           if (!success) {
             error = "Errored on test " + test.name() + "\n"
           }
@@ -53,7 +53,7 @@ class Lab4Grader extends JUnitSuite {
       var success = true
       var error = ""
       for (test <- InstTests.fullApplications) {
-        success = CPUTesterDriver(test, "pipelined-non-combin", "", "non-combinational", "non-combinational-port", 1) && success
+        success = CPUTesterDriver(test, "pipelined", "global") && success
         if (!success) {
           error = "Errored on test " + test.name() + "\n"
         }
