@@ -124,7 +124,7 @@ class PipelinedCPUBP(implicit val conf: CPUConfig) extends BaseCPU {
     // Force these wires not to disappear
     printf(p"BP correct: $bpCorrect; incorrect: $bpIncorrect\n")
   }
-
+  
   // Remove these as you hook up each one
   // registers.io  := DontCare
   // aluControl.io := DontCare
@@ -154,21 +154,12 @@ class PipelinedCPUBP(implicit val conf: CPUConfig) extends BaseCPU {
   // FETCH STAGE
   /////////////////////////////////////////////////////////////////////////////
 
-  //************* UPDATE THIS FOR BRANCH PREDICTOR PC FROM ID OR MEM ****************//
-  // Note: This comes from the memory stage!
-  // Only update the pc if pcstall is false
-  when (hazard.io.pcstall === false.B) {
-    when (hazard.io.pcfromtaken === false.B) {
-      pc := pcPlusFour.io.result
-    }  // hazard.io.pcfromtaken === true.B
-    .otherwise {
-      pc := next_pc
-    }
-  } .otherwise {  // hazard.io.pcstall === true.B
-    pc := pc
-  }
-  //*************** END UPDATE ****************//
-
+  // Select the proper next pc val according to pcSel
+  pc := MuxCase(0.U, Array(
+            (hazard.io.pcSel === 0.U) -> pcPlusFour.io.result,
+            (hazard.io.pcSel === 1.U) -> next_pc,
+            (hazard.io.pcSel === 2.U) -> id_next_pc,
+            (hazard.io.pcSel === 3.U) -> pc))
   // Send the PC to the instruction memory port to get the instruction
   io.imem.address := pc
   io.imem.valid   := true.B
@@ -208,9 +199,18 @@ class PipelinedCPUBP(implicit val conf: CPUConfig) extends BaseCPU {
   // Send the instruction to the immediate generator (line 42 in single-cycle/cpu.scala)
   immGen.io.instruction := if_id.io.data.instruction
 
-  //*********** UPDATE FOR BRANCH PREDICTOR: ADD NEW ADDER AND PREDICTOR ***************//
+  // Connect the branchAdd unit
+  branchAdd.io.inputx := if_id.io.data.pc
+  branchAdd.io.inputy := immGen.io.sextImm
+  // Send the PC back to fetch
+  id_next_pc := branchAdd.io.result
 
-  //*************** END UPDATE *****************//
+  // Set the predictor inputs
+  predictor.io.pc := if_id.io.data.pc
+
+  // Set the branch for this stage to the hazard
+  // This is needed for when the branch is predicted taken 
+  hazard.io.id_prediction := control.io.branch && predictor.io.prediction
 
   // Control block of the IDEX register
 
@@ -231,8 +231,6 @@ class PipelinedCPUBP(implicit val conf: CPUConfig) extends BaseCPU {
   id_ex_ctrl.io.in.ex_ctrl.branch       := control.io.branch
   id_ex_ctrl.io.in.ex_ctrl.jal          := control.io.jal
   id_ex_ctrl.io.in.ex_ctrl.jalr         := control.io.jalr
-
-  // Pass prediction through
   id_ex_ctrl.io.in.ex_ctrl.prediction   := predictor.io.prediction
 
   // Set the memory control signals
@@ -346,9 +344,38 @@ class PipelinedCPUBP(implicit val conf: CPUConfig) extends BaseCPU {
   } .otherwise {
     ex_mem.io.in.ex_result := id_ex.io.data.sextImm
   }
-  // ************** Logic to drive proper taken while using a branch predictor **************//
+// ************** Logic to drive proper taken while using a branch predictor **************//
+// Update the branch predictor
+  when (id_ex_ctrl.io.data.ex_ctrl.branch && ~hazard.io.ex_mem_flush) {
+    // when it's a branch, update the branch predictor
+    predictor.io.update := true.B
+    predictor.io.taken  := nextPCmod.io.taken
 
+    // Update the branch predictor stats
+    when (id_ex_ctrl.io.data.ex_ctrl.prediction === nextPCmod.io.taken) {
+      bpCorrect   := bpCorrect + 1.U
+    } 
+    .otherwise {
+      bpIncorrect := bpIncorrect + 1.U
+    }
 
+  }
+  .otherwise {
+    // If not a branch, don't update
+    predictor.io.update := false.B
+    //predictor.io.taken  := false.B
+    predictor.io.taken  := DontCare
+  }
+
+  // No need to do anything unless the prediction was wrong
+  when (id_ex_ctrl.io.data.ex_ctrl.branch){
+    when(id_ex_ctrl.io.data.ex_ctrl.prediction =/= nextPCmod.io.taken) {
+      ex_mem.io.in.taken := true.B
+    } 
+    .otherwise {
+      ex_mem.io.in.taken := false.B
+    }
+  }
   // ************** End of logic to drive proper taken while using a branch predictor **************//
 
   ex_mem.io.valid      := true.B
