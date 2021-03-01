@@ -18,12 +18,6 @@ In this assignment, you will extend what you started in [assignment 1](assignmen
 To do this, you will complete the datapath implementation and implement the control logic for the processor.
 At the end, you will be able to run *real applications* compiled with GCC on your processor!
 
------------------------------------------------------------------------
-
-EVERYTHING BELOW THIS IS NOT READY YET!
-
-![Under Construction!](under-construction.png)
-
 ## [Assignment 3: A pipelined CPU design](assignments/assignment-3.md)
 
 In this assignment, broken into two parts, you will be implementing a more realistic, pipelined-based core design.
@@ -36,9 +30,8 @@ In this assignment, you will extend the pipelined CPU with a branch predictor.
 You are given a slightly modified pipelined design, and asked to develop a few different branch predictor designs.
 Then, you will analyze the performance of these different designs on real applications.
 
-## [Assignment 4: Adding non-combinational memory](assignments/assignment-4-nc.md)
+-----------------------------------------------------------------------
 
-This is an alternative extension to the branch predictor assignment.
-In this assignment, you will connect the pipeline to a different memory system: one that doesn't return the result in the same cycle.
-To work with this realistic memory system, you will need to update the stall conditions in the pipeline.
-Then, you will analyze the performance of real appliations when connecting your processor to different memories.
+EVERYTHING BELOW THIS IS NOT READY YET!
+
+![Under Construction!](under-construction.png)
