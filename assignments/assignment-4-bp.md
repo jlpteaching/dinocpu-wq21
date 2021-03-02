@@ -346,7 +346,6 @@ See [the Submission section](#Submission) for more information on how to submit 
 |--------------|------------|
 | Part I       | 20%        |
 | Part II      | 80%        |
-| Extra credit | +10%       |
 
 # Submission
 
