@@ -30,8 +30,7 @@ In this assignment, you will extend the pipelined CPU with a branch predictor.
 You are given a slightly modified pipelined design, and asked to develop a few different branch predictor designs.
 Then, you will analyze the performance of these different designs on real applications.
 
------------------------------------------------------------------------
+## [Assignment 5: Cache-conscious and parallel programming](assignments/lab5/assignment5.md)
 
-EVERYTHING BELOW THIS IS NOT READY YET!
-
-![Under Construction!](under-construction.png)
+In this assignment you will work with the matrix multiply workload.
+You will try to optimize the algorithm to be more cache friendly then explore improving the performance by using multiple cores.
