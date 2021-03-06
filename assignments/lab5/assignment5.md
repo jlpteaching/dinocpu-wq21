@@ -6,7 +6,7 @@ Title: ECS 154B Lab 5, Winter 2021
 
 # DINO CPU Assignment 5: Matrix multiplication
 
-**Due by 11:59 PM on March 12, 2021.**
+**Due by 11:59 PM on March 15, 2021.**
 
 **Turn in via Gradescope**
 [See below for details.](#Submission)
