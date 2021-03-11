@@ -374,7 +374,7 @@ I suggest you *do not* write your answers by hand.
 
 ## Single cycle vs. pipelined
 
-In this part, you will run different CPU designs (sisngle-cycle and pipleined-bp) and compare their performance.
+In this part, you will run different CPU designs (single-cycle and pipleined-bp) and compare their performance.
 
 1. For each workload, what is the total number of instructions executed?
 2. For each workload, what is the CPI for the pipelined CPU with an *always not taken* branch predictor?
